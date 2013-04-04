@@ -1,5 +1,7 @@
 # RackApiKey
 
+[![Build Status](https://travis-ci.org/techwhizbang/rack-api-key.png)](https://travis-ci.org/techwhizbang/rack-api-key)
+
 RackApiKey is a middleware that relies on the client submitting requests
 with a header named "X-API-KEY" storing their private API key as the value. 
 The middleware will then intercept the request, read the value from the named 
