@@ -1,4 +1,4 @@
-# Rack::Api::Key
+# RackApiKey
 
 TODO: Write a gem description
 
