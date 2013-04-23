@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/techwhizbang/rack-api-key.png)](https://travis-ci.org/techwhizbang/rack-api-key)
 
 RackApiKey is a middleware that relies on the client submitting requests
-with a header named "X-API-KEY" storing their private API key as the value. 
+with a header named "HTTP_X_API_KEY" storing their private API key as the value. 
 The middleware will then intercept the request, read the value from the named 
 header and call the given "proc" used for API key lookup. The API key lookup 
 should only return a value if there is an exact match for the value stored in 
