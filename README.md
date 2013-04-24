@@ -94,14 +94,14 @@ end
 ```ruby
 # Overridden to set the Account attached to the API key instead.
 def rack_api_key_request_setter(env, api_key_lookup_val)
-	env[@options[:rack_api_key]] = api_key_lookup_val.account
+  env[@options[:rack_api_key]] = api_key_lookup_val.account
 end
 ```
 
 ```ruby
 Rack::Builder.new do
   map '/' do 
-		use RackApiKey, :api_key_proc => Proc.new { |val| ApiKey.find(val) }
+    use RackApiKey, :api_key_proc => Proc.new { |val| ApiKey.find(val) }
     run lambda { |env| [200, {"Content-Type" => "text/html"}, "Testing Middleware"] }
   end
 
