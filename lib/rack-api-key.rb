@@ -23,7 +23,10 @@ class RackApiKey
 	#											on successful authentication. The default value is
 	# 										"rack_api_key".
 	# * +:header_key+ - A way to override the header's name used to store the API key.
-	# 									The default value is "HTTP_X_API_KEY".
+	# 									The value given here should reflect how Rack interprets the
+  #                   header. For example if the client passes "X-API-KEY" Rack
+  #                   transforms interprets it as "HTTP_X_API_KEY". The default
+  #                   value is "HTTP_X_API_KEY".
 	#
 	# ==== Example
 	#		use RackApiKey, 
