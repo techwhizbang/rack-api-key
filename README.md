@@ -66,22 +66,35 @@ and validations beyond the ones already provided. For instance the API key
 may exist, but for some reason it was temporarily disabled. You could add a check
 for that here.
 
+### rack_api_key_request_setter method
+The default behavior of this method will take the return value of the API key
+proc and set it to the Rack env with the ke specified by :rack_api_key. You
+may override this method if you prefer setting something else in the Rack env 
+or perhaps nothing at all.
+
 ## Examples
 
 ```ruby
-# Override to use the default behavior plus something extra.
-def valid_api_key?
-  super && api_key.enabled?
+# Overridden to use the default behavior plus check if the api key is enabled.
+def valid_api_key?(api_header_val, api_key_lookup_val)
+  super && api_key_lookup_val.enabled?
 end
 ```
 
 ```ruby
-# Override to respond in JSON format. 
+# Overridden to respond in JSON format. 
 def unauthorized_api_key
  	body_text = {"error" => "blah blah blah"}.to_json
   [401, {'Content-Type' => 'application/json; charset=utf-8',
          'Content-Length' => body_text.size.to_s},
   [body_text]]
+end
+```
+
+```ruby
+# Overridden to set the Account attached to the API key instead.
+def rack_api_key_request_setter(env, api_key_lookup_val)
+	env[@options[:rack_api_key]] = api_key_lookup_val.account
 end
 ```
 
