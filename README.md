@@ -70,7 +70,7 @@ for that here.
 
 ```ruby
 def valid_api_key?
- 	super && api_key.enabled?
+	super && api_key.enabled?
 end
 ```
 
@@ -84,18 +84,18 @@ end
 ```
 
 ```ruby
-		Rack::Builder.new do
-		  map '/' do 
-				use RackApiKey, :api_key_proc => Proc.new { |val| ApiKey.find(val) }
-		    run lambda { |env| [200, {"Content-Type" => "text/html"}, "Testing Middleware"] }
-		  end
+Rack::Builder.new do
+  map '/' do 
+		use RackApiKey, :api_key_proc => Proc.new { |val| ApiKey.find(val) }
+    run lambda { |env| [200, {"Content-Type" => "text/html"}, "Testing Middleware"] }
+  end
 
-		  map "/all-options" do
-		  	use RackApiKey, 
-		  		:api_key_proc => Proc.new { |val| ApiKey.find(val) },
-		  		:rack_api_key => "account.api.key",
-		  		:header_key => "HTTP_X_CUSTOM_API_HEADER"
-		    run lambda { |env| [200, {"Content-Type" => "text/html"}, "Testing Middleware"] }
-		  end
-		end
+  map "/all-options" do
+  	use RackApiKey, 
+  		:api_key_proc => Proc.new { |val| ApiKey.find(val) },
+  		:rack_api_key => "account.api.key",
+  		:header_key => "HTTP_X_CUSTOM_API_HEADER"
+    run lambda { |env| [200, {"Content-Type" => "text/html"}, "Testing Middleware"] }
+  end
+end
 ```
