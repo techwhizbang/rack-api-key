@@ -69,12 +69,14 @@ for that here.
 ## Examples
 
 ```ruby
+# Override to use the default behavior plus something extra.
 def valid_api_key?
   super && api_key.enabled?
 end
 ```
 
 ```ruby
+# Override to respond in JSON format. 
 def unauthorized_api_key
  	body_text = {"error" => "blah blah blah"}.to_json
   [401, {'Content-Type' => 'application/json; charset=utf-8',
