@@ -58,7 +58,7 @@ This is the key that will be set in the Rack env with the return value of the
 This is a method that can be overridden with however you'd like to respond
 when a request with an invalid or unauthorized API key is encountered. The default
 behavior responds with a 401 plain/text message. I find it especially useful to
-override this method and switch to response to JSON format.
+override this method and switch the response to JSON format.
 
 ### valid_api_key? method
 This is another method that can be overridden if there are additional checks
