@@ -70,7 +70,7 @@ for that here.
 
 ```ruby
 def valid_api_key?
-	super && api_key.enabled?
+  super && api_key.enabled?
 end
 ```
 
