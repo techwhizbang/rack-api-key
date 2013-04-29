@@ -27,6 +27,10 @@ class RackApiKey
   #                   header. For example if the client passes "X-API-KEY" Rack
   #                   transforms interprets it as "HTTP_X_API_KEY". The default
   #                   value is "HTTP_X_API_KEY".
+  # * +:url_restriction+ - A way to restrict specific URLs that should pass through
+  #                        the rack-api-key middleware. In order to use pass an Array of Regex patterns.
+  #                        If left unspecified all requests will pass through the rack-api-key
+  #                        middleware.
 	#
 	# ==== Example
 	#		use RackApiKey, 
@@ -38,21 +42,26 @@ class RackApiKey
 		default_options = { 
 												:header_key => "HTTP_X_API_KEY", 
 											  :rack_api_key => "rack_api_key",
-											  :api_key_proc => Proc.new { raise NotImplementedError.new("Caller must implement a way to lookup an API key.") }
+											  :api_key_proc => Proc.new { raise NotImplementedError.new("Caller must implement a way to lookup an API key.") },
+                        :url_restriction => []
 											}
 		@options = default_options.merge(options)
 	end
 
 	def call(env)
-    api_header_val = env[@options[:header_key]]
-    api_key_lookup_val = @options[:api_key_proc].call(api_header_val)
-
-    if valid_api_key?(api_header_val, api_key_lookup_val)
-      rack_api_key_request_setter(env, api_key_lookup_val)
-      @app.call(env)
-    else
-      unauthorized_api_key
+    
+    if @options[:url_restriction].nil? || @options[:url_restriction].empty?      
+      process_request(env)
+    else 
+      request = Rack::Request.new(env)
+      url_matches = @options[:url_restriction].select { |url_regex| request.fullpath.match(url_regex) }
+      unless url_matches.empty?
+        process_request(env)
+      else
+        @app.call(env)
+      end
     end
+
   end
 
   ##
@@ -81,6 +90,20 @@ class RackApiKey
 	def valid_api_key?(api_header_val, api_key_lookup_val)
     !api_header_val.nil? && api_header_val != "" && 
     !api_key_lookup_val.nil? && api_key_lookup_val != ""
+  end
+
+  private
+
+  def process_request(env)
+    api_header_val = env[@options[:header_key]]
+    api_key_lookup_val = @options[:api_key_proc].call(api_header_val)
+
+    if valid_api_key?(api_header_val, api_key_lookup_val)
+      rack_api_key_request_setter(env, api_key_lookup_val)
+      @app.call(env)
+    else
+      unauthorized_api_key
+    end
   end
 
 end

@@ -54,6 +54,14 @@ a value that will ultimately be set in the Rack env.
 This is the key that will be set in the Rack env with the return value of the
 :api_key_proc.
 
+### :url_restriction
+This is an option that can restrict the rack-api-middleware to specific URLs.
+This works well when you have a mixture of API endpoints that require
+authentication and some that might not. Or a combination of API endpoints and
+publicly facing webpages. Perhaps you've scoped all of your API endpoints to
+"/api", and the rest of the URL mappings or routes are supposed to be wide open.
+
+
 ### unauthorized_api_key method
 This is a method that can be overridden with however you'd like to respond
 when a request with an invalid or unauthorized API key is encountered. The default
@@ -101,7 +109,9 @@ end
 ```ruby
 Rack::Builder.new do
   map '/' do 
-    use RackApiKey, :api_key_proc => Proc.new { |val| ApiKey.find(val) }
+    use RackApiKey,
+      :api_key_proc => Proc.new { |val| ApiKey.find(val) },
+      :url_restriction => [/api/]
     run lambda { |env| [200, {"Content-Type" => "text/html"}, "Testing Middleware"] }
   end
 
