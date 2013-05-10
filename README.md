@@ -31,8 +31,10 @@ Or install it yourself as:
 
 ```ruby
 use RackApiKey, :api_key_proc => Proc.new { |val| ApiKey.find(val) },
-		  					:rack_api_key => "account.api.key",
-		  					:header_key => "HTTP_X_CUSTOM_API_HEADER"
+                :rack_api_key => "account.api.key",
+                :header_key => "HTTP_X_CUSTOM_API_HEADER",
+                :url_restriction => [/api/],
+                :url_exclusion => [/api\/status/]
 ```
 
 ### :header_key
@@ -61,6 +63,11 @@ authentication and some that might not. Or a combination of API endpoints and
 publicly facing webpages. Perhaps you've scoped all of your API endpoints to
 "/api", and the rest of the URL mappings or routes are supposed to be wide open.
 
+### :url_exclusion
+This is an option to allow specific URLs to bypass rack-api-middleware authentication.
+This works well when you require a single or few endpoints to not require
+authentication. Perhaps you've scoped all of your API endpoints to "/api" but wish
+to leave "/api/status" publically facing.
 
 ### unauthorized_api_key method
 This is a method that can be overridden with however you'd like to respond
