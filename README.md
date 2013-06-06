@@ -67,7 +67,7 @@ publicly facing webpages. Perhaps you've scoped all of your API endpoints to
 This is an option to allow specific URLs to bypass rack-api-middleware authentication.
 This works well when you require a single or few endpoints to not require
 authentication. Perhaps you've scoped all of your API endpoints to "/api" but wish
-to leave "/api/status" publically facing.
+to leave "/api/status" publicly facing.
 
 ### unauthorized_api_key method
 This is a method that can be overridden with however you'd like to respond
